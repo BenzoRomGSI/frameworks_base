@@ -4891,6 +4891,15 @@ public final class Settings {
         public static final String QS_SHOW_BRIGHTNESS_ICON = "qs_show_brightness_icon";
 
         /**
+         * Show four g instead of LTE
+         * @hide
+         */
+        public static final String SHOW_FOURG = "show_fourg";
+
+        /** @hide */
+        public static final Validator SHOW_FOURG_VALIDATOR = BOOLEAN_VALIDATOR;
+
+        /**
          * Settings to backup. This is here so that it's in the same place as the settings
          * keys and easy to update.
          *
@@ -4959,7 +4968,8 @@ public final class Settings {
             STATUSBAR_CLOCK_DATE_FORMAT,
             INCREASING_RING,
             INCREASING_RING_START_VOLUME,
-            INCREASING_RING_RAMP_UP_TIME
+            INCREASING_RING_RAMP_UP_TIME,
+            SHOW_FOURG
         };
 
         /**
@@ -5111,6 +5121,7 @@ public final class Settings {
             PRIVATE_SETTINGS.add(SCREENSHOT_DEFAULT_MODE);
             PRIVATE_SETTINGS.add(FINGERPRINT_SUCCESS_VIB);
             PRIVATE_SETTINGS.add(LOCKSCREEN_ROTATION);
+            PRIVATE_SETTINGS.add(SHOW_FOURG);
         }
 
         /**
@@ -5210,6 +5221,7 @@ public final class Settings {
             VALIDATORS.put(INCREASING_RING, INCREASING_RING_VALIDATOR);
             VALIDATORS.put(INCREASING_RING_START_VOLUME	, INCREASING_RING_START_VOLUME_VALIDATOR);
             VALIDATORS.put(INCREASING_RING_RAMP_UP_TIME, INCREASING_RING_RAMP_UP_TIME_VALIDATOR);
+            VALIDATORS.put(SHOW_FOURG, SHOW_FOURG_VALIDATOR);
         }
 
         /**
