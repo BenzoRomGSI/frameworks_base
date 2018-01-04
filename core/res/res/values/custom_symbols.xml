@@ -111,4 +111,7 @@
   <java-symbol type="array" name="notification_light_package_mapping" />
   <java-symbol type="integer" name="config_deviceLightCapabilities" />
 
+  <!-- Whether the device supports Smart Pixels -->
+  <java-symbol type="bool" name="config_enableSmartPixels" />
+
 </resources>
