@@ -180,6 +180,7 @@ import com.android.systemui.plugins.statusbar.NotificationSwipeActionHelper.Snoo
 import com.android.systemui.qs.QSFragment;
 import com.android.systemui.qs.QSPanel;
 import com.android.systemui.qs.QSTileHost;
+import com.android.systemui.qs.QuickStatusBarHeader;
 import com.android.systemui.qs.car.CarQSFragment;
 import com.android.systemui.recents.Recents;
 import com.android.systemui.recents.ScreenPinningRequest;
@@ -396,6 +397,7 @@ public class StatusBar extends SystemUI implements DemoMode,
 
     // settings
     private QSPanel mQSPanel;
+    private QuickStatusBarHeader mQuickStatusBarHeader;
 
     // Swap naviagtion keys
     protected boolean mUseSwapKey = false;
@@ -5319,6 +5321,12 @@ public class StatusBar extends SystemUI implements DemoMode,
             resolver.registerContentObserver(Settings.System.getUriFor(
                     Settings.System.HEADS_UP_BLACKLIST_VALUES),
                     false, this, UserHandle.USER_ALL);
+            resolver.registerContentObserver(Settings.System.getUriFor(
+                    Settings.System.SHOW_BATTERY_PERCENT),
+                    false, this, UserHandle.USER_ALL);
+            resolver.registerContentObserver(Settings.Secure.getUriFor(
+                    Settings.Secure.STATUS_BAR_BATTERY_STYLE),
+                    false, this, UserHandle.USER_ALL);
             update();
         }
 
@@ -5326,6 +5334,12 @@ public class StatusBar extends SystemUI implements DemoMode,
         public void onChange(boolean selfChange, Uri uri) {
             super.onChange(selfChange, uri);
             update();
+            if (uri.equals(Settings.System.getUriFor(
+                    Settings.System.SHOW_BATTERY_PERCENT))
+                    || uri.equals(Settings.Secure.getUriFor(
+                    Settings.Secure.STATUS_BAR_BATTERY_STYLE))) {
+                updateBatterySettings();
+            }
         }
 
         public void update() {
@@ -5333,6 +5347,19 @@ public class StatusBar extends SystemUI implements DemoMode,
             final String blackString = Settings.System.getString(resolver,
                     Settings.System.HEADS_UP_BLACKLIST_VALUES);
             splitAndAddToArrayList(mBlacklist, blackString, "\\|");
+            updateBatterySettings();
+        }
+    }
+
+    private void updateBatterySettings() {
+        if (mStatusBarView != null) {
+            mStatusBarView.updateBatterySettings();
+        }
+        if (mKeyguardStatusBar != null) {
+            mKeyguardStatusBar.updateBatterySettings();
+        }
+        if (mQuickStatusBarHeader != null) {
+            mQuickStatusBarHeader.updateBatterySettings();
         }
     }
 
