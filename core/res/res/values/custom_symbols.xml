@@ -119,4 +119,8 @@
   <java-symbol type="string" name="notify_battery_fully_charged_title" />
   <java-symbol type="string" name="notify_battery_fully_charged_text" />
 
+  <!-- Bottom gestures -->
+  <java-symbol type="dimen" name="nav_gesture_swipe_min_length" />
+  <java-symbol type="dimen" name="nav_gesture_long_press_max_length" />
+
 </resources>
