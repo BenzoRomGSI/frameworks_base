@@ -76,11 +76,13 @@ public class CollapsedStatusBarFragment extends Fragment implements CommandQueue
     // custom carrier label
     private View mCustomCarrierLabel;
     private int mShowCarrierLabel;
-
     // statusbar weather
     private View mWeatherImageView;
     private View mWeatherTextView;
     private int mShowWeather;
+    // network traffic
+    private View mNetworkTraffic;
+    private int mShowNetworkTraffic;
 
     private class SettingsObserver extends ContentObserver {
        SettingsObserver(Handler handler) {
@@ -96,6 +98,9 @@ public class CollapsedStatusBarFragment extends Fragment implements CommandQueue
                     false, this, UserHandle.USER_ALL);
          mContentResolver.registerContentObserver(Settings.System.getUriFor(
                     Settings.System.STATUSBAR_SHOW_WEATHER_TEMP),
+                    false, this, UserHandle.USER_ALL);
+         mContentResolver.registerContentObserver(Settings.System.getUriFor(
+                    Settings.System.NETWORK_TRAFFIC_STATE),
                     false, this, UserHandle.USER_ALL);
        }
 
@@ -146,6 +151,7 @@ public class CollapsedStatusBarFragment extends Fragment implements CommandQueue
         mCustomCarrierLabel = mStatusBar.findViewById(R.id.statusbar_carrier_text);
         mWeatherTextView = mStatusBar.findViewById(R.id.weather_temp_sb);
         mWeatherImageView = mStatusBar.findViewById(R.id.weather_image_sb);
+        mNetworkTraffic = mStatusBar.findViewById(R.id.networkTraffic);
         updateSettings(false);
         showSystemIconArea(false);
         initEmergencyCryptkeeperText();
@@ -271,6 +277,7 @@ public class CollapsedStatusBarFragment extends Fragment implements CommandQueue
     public void hideNotificationIconArea(boolean animate) {
         animateHide(mNotificationIconAreaInner, animate, true);
         animateHide(mCenterClockLayout, animate, true);
+        animateHide(mNetworkTraffic, animate, true);
         hideStaturbarWeather();
     }
 
@@ -278,6 +285,7 @@ public class CollapsedStatusBarFragment extends Fragment implements CommandQueue
         animateShow(mNotificationIconAreaInner, animate);
         animateShow(mCenterClockLayout, animate);
         showStaturbarWeather(animate);
+        updateNetworkTraffic(animate);
     }
 
     public void hideOperatorName(boolean animate) {
@@ -323,6 +331,14 @@ public class CollapsedStatusBarFragment extends Fragment implements CommandQueue
         if (mWeatherImageView != null) {
             if (mShowWeather == 1 || mShowWeather == 2 || mShowWeather == 5) {
                 animateShow(mWeatherImageView, animate);
+            }
+        }
+    }
+
+    public void updateNetworkTraffic(boolean animate) {
+        if (mNetworkTraffic != null) {
+            if (mShowNetworkTraffic != 0) {
+                animateShow(mNetworkTraffic, animate);
             }
         }
     }
@@ -406,9 +422,13 @@ public class CollapsedStatusBarFragment extends Fragment implements CommandQueue
         mShowWeather = Settings.System.getIntForUser(mContentResolver,
                 Settings.System.STATUSBAR_SHOW_WEATHER_TEMP, 0,
                 UserHandle.USER_CURRENT);
+        mShowNetworkTraffic = Settings.System.getIntForUser(mContentResolver,
+                Settings.System.NETWORK_TRAFFIC_STATE, 0,
+                UserHandle.USER_CURRENT);
         updateClockStyle(animate);
         setCarrierLabel(animate);
         showStaturbarWeather(animate);
+        updateNetworkTraffic(animate);
     }
 
     private void updateClockStyle(boolean animate) {
